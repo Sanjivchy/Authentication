@@ -27,7 +27,8 @@ const RegisterForm = () => {
         resolver: zodResolver(RegisterSchemas),
         defaultValues: {
             email:"",
-            password:""
+            password:"",
+            name:""
         },
     });
     const handleSubmit = (values:z.infer<typeof RegisterSchemas>) =>{
