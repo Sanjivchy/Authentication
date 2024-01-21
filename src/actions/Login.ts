@@ -1,10 +1,32 @@
 "use server"
 import * as z from "zod"
 import { LoginSchemas } from "@/schemas"
-export const login =async (values:z.infer<typeof LoginSchemas>) =>{
+import { signIn } from "@/auth/auth"
+import { DEFAULT_LOGIN_REDIRECT } from "@/routes"
+import { AuthError } from "next-auth"
+
+export const login = async (values: z.infer<typeof LoginSchemas>) => {
     const validatedFields = LoginSchemas.safeParse(values)
-    if(!validatedFields.success){
-        return {error : 'Invalid fields!', success : false}
+    if (!validatedFields.success) {
+        return { error: 'Invalid fields!', success: false }
     }
-    return{ success : 'email sent',}
+
+    const { email, password } = validatedFields.data;
+    try {
+        await signIn('credentials', {
+            email,
+            password,
+            redirectTo: DEFAULT_LOGIN_REDIRECT,
+        })
+    } catch (error) {
+        if(error instanceof AuthError){
+           switch(error.type){
+            case 'CredentialsSignin':
+                return { error: 'Invalid credentials!' }
+            default:
+                return { error: 'Something went wrong!', }
+           }
+        }
+        throw error;
+    }
 }

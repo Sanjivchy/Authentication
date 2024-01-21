@@ -4,14 +4,21 @@ import React from 'react'
 import { FcGoogle } from 'react-icons/fc';
 import { FaGithub } from 'react-icons/fa';
 import { Button } from '@/components/ui/button';
+import { signIn } from 'next-auth/react';
+import { DEFAULT_LOGIN_REDIRECT } from '@/routes';
 const Social = () => {
+    const onClick = (provider : "google" | "github") => {
+        signIn(provider,{
+            callbackUrl: DEFAULT_LOGIN_REDIRECT
+        })
+    }
     return (
         <div className='flex items-center gap-x-4 w-full'>
             <Button
                 size="lg"
                 className='w-full'
                 variant="outline"
-                onClick={() => { }}
+                onClick={() => onClick("google")}
             >
                 <FcGoogle />
             </Button>
@@ -19,7 +26,7 @@ const Social = () => {
                 size="lg"
                 className='w-full'
                 variant="outline"
-                onClick={() => { }}
+                onClick={() => onClick("github")}
             >
                 <FaGithub />
             </Button>
