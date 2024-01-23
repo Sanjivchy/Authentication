@@ -24,7 +24,7 @@ export const {
     error: "/auth/error",
   },
   events:{
-    async linkAccount({ user }) {
+    async linkAccount({ user, }) {
       await db.user.update({
         where: {
           id: user.id
@@ -37,6 +37,24 @@ export const {
   },
 
   callbacks: {
+    async signIn({ user, account }) {
+      //allow OAuth without email verification
+      if(account?.provider !== 'credentials') {
+        return true
+      }
+      
+      if(user.id){
+        const existingUser = await getUserById(user.id)
+        //prevent  sign in without email verification
+        if(!existingUser) {
+          return false
+        }
+      }
+
+      //TODO: add 2FA check
+  
+      return true
+    },
     //@ts-ignore
     async session({session, token }) {
 

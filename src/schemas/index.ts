@@ -20,3 +20,15 @@ export const RegisterSchemas = z.object({
         message:"Password is required"
     }),
 })
+
+export const ResetSchemas = z.object({
+    email: z.string().email({
+        message:"Email is required"
+    }),
+})
+
+export const NewPasswordSchemas = z.object({
+    password: z.string().min(6,{
+        message:"Password is required"
+    }),
+})
