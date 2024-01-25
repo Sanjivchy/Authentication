@@ -1,17 +1,20 @@
 import React from 'react';
 import { auth, signOut } from '@/auth/auth';
+import { Button } from '@/components/ui/button';
 const page = async () => {
   const session = await auth();
   return (
-    <div>
-      {
-        JSON.stringify(session)
-      }
+    <div className='p-6'>
+      <pre>
+        {
+          JSON.stringify(session, null, 2)
+        }
+      </pre>
       <form action={async (e) => {
         "use server";
         await signOut();
       }}>
-        <button type="submit">Logout</button>
+        <Button type="submit">Logout</Button>
       </form>
     </div>
   )

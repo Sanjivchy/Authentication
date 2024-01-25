@@ -3,7 +3,17 @@ import { Resend } from 'resend';
 
 const resend  = new Resend(process.env.RESEND_API_KEY);
 
-
+export const sendTwoFactorTokenEmail = async(
+    email:string,
+    token:string
+)=>{
+    await resend.emails.send({
+        to: email,
+        from: "onboarding@resend.dev",
+        subject: "Two Factor Token",
+        html: `<p>Your two factor token is: ${token}</p>`
+    });
+}
 export  const sendPasswordResetEmail = async(
     email:string,
     token:string
